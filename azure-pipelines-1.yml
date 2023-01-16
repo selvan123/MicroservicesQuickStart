@@ -14,8 +14,12 @@ variables:
   imageRepository: 'selvanmicroservicesquickstart'
   containerRegistry: 'acrselvantest.azurecr.io'
   dockerfilePath: 'Dockerfile'
+  envName: 'selvan123MicroservicesQuickStart'
+  resourceName: 'demoapp'
+  
   tag: '$(Build.BuildId)'
-
+  imagePullSecret: 'my-app-secret' # image pull secret
+  
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
@@ -37,3 +41,21 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+     
+    - task: KubernetesManifest@0
+      displayName: Create imagePullSecret
+      inputs:
+        action: createSecret
+        secretName: $(imagePullSecret)
+        dockerRegistryEndpoint: $(dockerRegistryServiceConnection)       
+
+    - task: KubernetesManifest@0
+      displayName: Deploy to Kubernetes cluster
+      inputs:
+        action: deploy
+        manifests: |
+          $(System.DefaultWorkingDirectory)/k8s/*.yaml                        
+        imagePullSecrets: |
+          $(imagePullSecret)
+        containers: |
+          $(containerRegistry)/$(imageRepository):$(tag)
