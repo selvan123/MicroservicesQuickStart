@@ -18,7 +18,7 @@ variables:
   resourceName: 'demoapp'
   
   tag: '$(Build.BuildId)'
-  imagePullSecret: 'my-app-secret' # image pull secret
+  imagePullSecret: 'myacr' ## crated using kubectl cmd
   
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -42,13 +42,13 @@ stages:
         tags: |
           $(tag)
      
-    - task: KubernetesManifest@0
-      displayName: Create imagePullSecret
-      inputs:
-        action: createSecret
-        secretName: $(imagePullSecret)
-        dockerRegistryEndpoint: $(dockerRegistryServiceConnection) 
-        kubernetesServiceConnection: aksconnection
+    # - task: KubernetesManifest@0
+    #   displayName: Create imagePullSecret
+    #   inputs:
+    #     action: createSecret
+    #     secretName: $(imagePullSecret)
+    #     dockerRegistryEndpoint: $(dockerRegistryServiceConnection) 
+    #     kubernetesServiceConnection: aksconnection
 
     - task: KubernetesManifest@0
       displayName: Deploy to Kubernetes cluster
