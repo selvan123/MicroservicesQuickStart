@@ -48,7 +48,7 @@ stages:
         action: createSecret
         secretName: $(imagePullSecret)
         dockerRegistryEndpoint: $(dockerRegistryServiceConnection) 
-        kubernetesServiceConnection: aks1-demoapp
+        kubernetesServiceConnection: aks1-demoapp1
 
     - task: KubernetesManifest@0
       displayName: Deploy to Kubernetes cluster
@@ -60,4 +60,4 @@ stages:
           $(imagePullSecret)
         containers: |
           $(containerRegistry)/$(imageRepository):$(tag)
-        kubernetesServiceConnection: aks1-demoapp
+        kubernetesServiceConnection: aks1-demoapp1
