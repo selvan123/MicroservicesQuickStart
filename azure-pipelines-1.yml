@@ -10,11 +10,12 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '1a1ae89c-3127-408c-9bee-359ea3d1016a'
+  dockerRegistryServiceConnection: 'acrconn'
+  aksServiceConnection : 'aksconn'
   imageRepository: 'selvanmicroservicesquickstart'
-  containerRegistry: 'acrselvantest.azurecr.io'
+  containerRegistry: 'selvanacr123.azurecr.io'
   dockerfilePath: 'Dockerfile'
-  envName: 'selvan123MicroservicesQuickStart'
+  #envName: 'selvan123MicroservicesQuickStart'
   resourceName: 'demoapp'
   
   tag: '$(Build.BuildId)'
@@ -42,13 +43,13 @@ stages:
         tags: |
           $(tag)
      
-    # - task: KubernetesManifest@0
-    #   displayName: Create imagePullSecret
-    #   inputs:
-    #     action: createSecret
-    #     secretName: $(imagePullSecret)
-    #     dockerRegistryEndpoint: $(dockerRegistryServiceConnection) 
-    #     kubernetesServiceConnection: aksconnection
+    - task: KubernetesManifest@0
+      displayName: Create imagePullSecret
+      inputs:
+        action: createSecret
+        secretName: $(imagePullSecret)
+        dockerRegistryEndpoint: $(dockerRegistryServiceConnection) 
+        kubernetesServiceConnection: $(aksServiceConnection)
 
     - task: KubernetesManifest@0
       displayName: Deploy to Kubernetes cluster
@@ -60,4 +61,4 @@ stages:
           $(imagePullSecret)
         containers: |
           $(containerRegistry)/$(imageRepository):$(tag)
-        kubernetesServiceConnection: aksconnection
+        kubernetesServiceConnection: $(aksServiceConnection)
