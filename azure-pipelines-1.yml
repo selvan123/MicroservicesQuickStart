@@ -11,7 +11,7 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'acrconn'
-  aksServiceConnection : 'aksconn'
+  aksServiceConnection : 'aksconn1'
   imageRepository: 'selvanmicroservicesquickstart'
   containerRegistry: 'selvanacr123.azurecr.io'
   dockerfilePath: 'Dockerfile'
