@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: swagger-api-cont
-        image: acrselvantest.azurecr.io/selvanmicroservicesquickstart
+        image: selvanacr123.azurecr.io/selvanmicroservicesquickstart
         env:
           - name: ASPNETCORE_URLS        
             value: http://+:8080        
