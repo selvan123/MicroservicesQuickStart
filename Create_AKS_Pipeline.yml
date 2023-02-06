@@ -3,7 +3,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- master
+- none
 
 resources:
 - repo: self
@@ -27,7 +27,7 @@ stages:
         inlineScript: |
           RGNAME=selvan123
           ACRNAME=selvanacr123
-          AKSName=selvanaskdemo
+          AKSName=selvanaksdemo
           
           az group create -l westus -n $RGNAME
           
