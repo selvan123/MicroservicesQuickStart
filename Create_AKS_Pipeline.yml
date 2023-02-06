@@ -1,0 +1,36 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: CreateAKS
+  jobs:
+  - job: CreateAKS
+    displayName: CreateAKS
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'Visual Studio Enterprise – MPN(8dd549a5-a0ea-4590-8c78-d22e3a52b273)'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          RGNAME=selvan123
+          ACRNAME=selvanacr123
+          AKSName=selvanaskdemo
+          
+          az group create -l westus -n $RGNAME
+          
+          az acr create -n $ACRNAME -g $RGNAME --sku basic
+          
+          az aks create -n $AKSName -g $RGNAME --generate-ssh-keys --attach-acr $ACRNAME
